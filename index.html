@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>Corrida do Theo — Escolha de Personagem</title>
+  <style>
+    html, body { margin:0; padding:0; height:100%; background:#0b1220; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    .wrap { display:flex; flex-direction:column; height:100%; }
+    .topbar {
+      color:#e8eefc; display:flex; gap:14px; align-items:center; justify-content:space-between;
+      padding:10px 14px; font-weight:800; letter-spacing:.2px; user-select:none;
+    }
+    .hud { display:flex; gap:10px; align-items:center; font-weight:800; flex-wrap:wrap; justify-content:flex-end; }
+    .badge { background:rgba(255,255,255,.08); padding:6px 10px; border-radius:999px; }
+    canvas { display:block; width:100%; height:100%; background:
+      radial-gradient(1200px 600px at 50% 30%, rgba(88,124,255,.25), transparent 60%),
+      linear-gradient(#0b1220, #07101d);
+    }
+    .game { position:relative; flex:1; }
+    .overlay {
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      color:#e8eefc; text-align:center; padding:18px;
+    }
+    .card {
+      max-width:640px; width:min(94vw,640px);
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:18px; padding:16px 16px 14px;
+      box-shadow: 0 14px 50px rgba(0,0,0,.35);
+      backdrop-filter: blur(10px);
+    }
+    .title { font-size:20px; margin:0 0 8px; }
+    .txt { margin:0 0 12px; opacity:.92; line-height:1.35; }
+    .btnrow { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+    button {
+      border:0; border-radius:12px; padding:10px 14px; font-weight:900;
+      cursor:pointer; color:#0b1220; background:#9bb5ff;
+    }
+    button.secondary { background:rgba(255,255,255,.16); color:#e8eefc; }
+    .mobileControls {
+      position:absolute; left:0; right:0; bottom:12px;
+      display:flex; justify-content:center; gap:12px; pointer-events:none;
+    }
+    .mobileControls button {
+      pointer-events:auto;
+      min-width:140px;
+      background:rgba(255,255,255,.14);
+      color:#e8eefc;
+      border:1px solid rgba(255,255,255,.22);
+    }
+    .note { font-size:12px; opacity:.78; margin-top:10px; }
+
+    /* Character selection */
+    .chars { display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:10px; margin:12px 0 10px; }
+    @media (min-width: 560px) { .chars { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    .charCard {
+      border-radius:14px;
+      background:rgba(255,255,255,.07);
+      border:1px solid rgba(255,255,255,.12);
+      padding:10px 10px 8px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .08s ease, border-color .08s ease;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:center;
+    }
+    .charCard:hover { transform: translateY(-1px); border-color: rgba(155,181,255,.55); }
+    .charCard.selected { outline: 2px solid rgba(155,181,255,.75); border-color: rgba(155,181,255,.55); }
+    .avatar { width:56px; height:56px; border-radius:14px; display:grid; place-items:center; font-weight:1000; }
+    .charName { font-weight:950; font-size:12.5px; opacity:.95; }
+    .charHint { font-size:11px; opacity:.72; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>🏃‍♂️ Corrida do Theo</div>
+      <div class="hud">
+        <div class="badge">Personagem: <span id="pname">Velocista Azul</span></div>
+        <div class="badge">Pontos: <span id="score">0</span></div>
+        <div class="badge">Moedas: <span id="coins">0</span></div>
+        <div class="badge">Veloc.: <span id="speed">1.0</span>x</div>
+      </div>
+    </div>
+
+    <div class="game">
+      <canvas id="c"></canvas>
+
+      <div class="overlay" id="overlay">
+        <div class="card">
+          <p class="title" id="ovTitle">Escolha o personagem</p>
+          <p class="txt" id="ovText">
+            <b>PC:</b> Espaço/↑ para pular • ↓ para deslizar<br/>
+            <b>Celular:</b> use os botões na tela
+          </p>
+
+          <div class="chars" id="charGrid"></div>
+
+          <div class="btnrow">
+            <button id="startBtn">Começar</button>
+            <button class="secondary" id="howBtn">Como jogar</button>
+          </div>
+          <div class="note" id="ovNote">Dica: colete moedas e desvie dos obstáculos. A velocidade aumenta com o tempo.</div>
+        </div>
+      </div>
+
+      <div class="mobileControls">
+        <button id="jumpBtn">PULAR</button>
+        <button id="duckBtn">ABAIXAR</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+
+  const scoreEl = document.getElementById('score');
+  const coinsEl = document.getElementById('coins');
+  const speedEl = document.getElementById('speed');
+  const pnameEl = document.getElementById('pname');
+
+  const overlay = document.getElementById('overlay');
+  const ovTitle = document.getElementById('ovTitle');
+  const ovText = document.getElementById('ovText');
+  const ovNote = document.getElementById('ovNote');
+  const startBtn = document.getElementById('startBtn');
+  const howBtn = document.getElementById('howBtn');
+
+  const jumpBtn = document.getElementById('jumpBtn');
+  const duckBtn = document.getElementById('duckBtn');
+  const charGrid = document.getElementById('charGrid');
+
+  // Helpers
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = Math.floor(rect.width * dpr);
+    canvas.height = Math.floor(rect.height * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', resize, { passive:true });
+  resize();
+
+  // Characters (originais / inspirados)
+  const characters = [
+    { id:'speedster', name:'Velocista Azul', hint:'Mais rápido', baseMul:1.18, accent:'#4aa3ff', shoe:'#ff5a5a', icon:'⚡' },
+    { id:'plumber',   name:'Encanador Herói', hint:'Equilibrado', baseMul:1.00, accent:'#ff6b6b', shoe:'#ffd166', icon:'🧢' },
+    { id:'shadow',    name:'Sombra Alta',     hint:'Pulo maior',  baseMul:0.97, accent:'#b98bff', shoe:'#e8eefc', icon:'👁️' },
+    { id:'web',       name:'Herói Ágil',      hint:'Desliza melhor', baseMul:1.05, accent:'#ff4d6d', shoe:'#4aa3ff', icon:'🕸️' },
+  ];
+  let selectedChar = characters[0];
+
+  function renderCharGrid() {
+    charGrid.innerHTML = '';
+    for (const ch of characters) {
+      const el = document.createElement('div');
+      el.className = 'charCard' + (ch.id === selectedChar.id ? ' selected' : '');
+      el.innerHTML = `
+        <div class="avatar" style="background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);">
+          <div style="width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:${ch.accent};color:#0b1220;font-size:18px;">${ch.icon}</div>
+        </div>
+        <div class="charName">${ch.name}</div>
+        <div class="charHint">${ch.hint}</div>
+      `;
+      el.addEventListener('click', () => {
+        selectedChar = ch;
+        pnameEl.textContent = ch.name;
+        renderCharGrid();
+      });
+      charGrid.appendChild(el);
+    }
+    pnameEl.textContent = selectedChar.name;
+  }
+  renderCharGrid();
+
+  // World / state
+  let running = false;
+  let lastT = 0;
+
+  const world = {
+    w: () => canvas.getBoundingClientRect().width,
+    h: () => canvas.getBoundingClientRect().height,
+    groundY: () => Math.floor(canvas.getBoundingClientRect().height * 0.78),
+  };
+
+  const hero = {
+    x: 120,
+    y: 0,
+    w: 48,
+    h: 48,
+    vy: 0,
+    onGround: false,
+    ducking: false,
+    invuln: 0,
+    jumpBoost: 1.0,
+    duckGrace: 1.0
+  };
+
+  let score = 0;
+  let coins = 0;
+  let baseSpeed = 520;   // px/s
+  let speedMul = 1.0;
+
+  const obstacles = [];
+  const coinDrops = [];
+  const particles = [];
+
+  let spawnObsIn = 900;
+  let spawnCoinIn = 600;
+
+  function updateHUD() {
+    scoreEl.textContent = Math.floor(score);
+    coinsEl.textContent = coins;
+    speedEl.textContent = speedMul.toFixed(1);
+    pnameEl.textContent = selectedChar.name;
+  }
+
+  function resetGame() {
+    obstacles.length = 0;
+    coinDrops.length = 0;
+    particles.length = 0;
+
+    score = 0; coins = 0;
+    baseSpeed = 520;
+
+    hero.y = world.groundY() - hero.h;
+    hero.vy = 0;
+    hero.onGround = true;
+    hero.ducking = false;
+    hero.invuln = 0;
+
+    // Character traits
+    hero.jumpBoost = (selectedChar.id === 'shadow') ? 1.12 : 1.00;
+    hero.duckGrace = (selectedChar.id === 'web') ? 1.12 : 1.00;
+
+    spawnObsIn = 700;
+    spawnCoinIn = 500;
+    lastT = 0;
+
+    updateHUD();
+  }
+
+  // Spawning
+  function spawnObstacle() {
+    const g = world.groundY();
+    const type = Math.random() < 0.55 ? 'block' : 'spike';
+    const size = type === 'block' ? rand(40, 70) : rand(34, 52);
+
+    const o = {
+      x: world.w() + 40,
+      y: g - size,
+      w: size,
+      h: size,
+      type,
+    };
+
+    // Tall bar -> must duck
+    if (Math.random() < 0.25) {
+      o.type = 'bar';
+      o.w = rand(60, 110);
+      o.h = rand(24, 34);
+      o.y = g - hero.h - rand(16, 28);
+    }
+
+    obstacles.push(o);
+  }
+
+  function spawnCoin() {
+    const g = world.groundY();
+    const c = {
+      x: world.w() + 40,
+      y: g - rand(90, 210),
+      r: 10,
+      taken: false,
+    };
+    coinDrops.push(c);
+  }
+
+  // Input
+  function jump() {
+    if (!running) return;
+    if (hero.onGround) {
+      hero.vy = -720 * hero.jumpBoost;
+      hero.onGround = false;
+      burst(hero.x + hero.w/2, hero.y + hero.h, 14);
+    }
+  }
+  function duck(on) {
+    if (!running) return;
+    hero.ducking = on;
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); jump(); }
+    if (e.code === 'ArrowDown') { e.preventDefault(); duck(true); }
+    if ((e.code === 'Enter' || e.code === 'KeyR') && !running) { start(); }
+  }, { passive:false });
+
+  window.addEventListener('keyup', (e) => {
+    if (e.code === 'ArrowDown') { e.preventDefault(); duck(false); }
+  }, { passive:false });
+
+  jumpBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); jump(); });
+  duckBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); duck(true); });
+  duckBtn.addEventListener('pointerup', (e) => { e.preventDefault(); duck(false); });
+  duckBtn.addEventListener('pointercancel', () => { duck(false); });
+
+  // Collision
+  function rectsOverlap(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+  function heroRect() {
+    const h = hero.ducking ? Math.floor(hero.h * 0.65) : hero.h;
+    const y = hero.ducking ? hero.y + (hero.h - h) : hero.y;
+    return { x: hero.x, y, w: hero.w, h };
+  }
+  function circleRectOverlap(cx, cy, r, rect) {
+    const closestX = clamp(cx, rect.x, rect.x + rect.w);
+    const closestY = clamp(cy, rect.y, rect.y + rect.h);
+    const dx = cx - closestX;
+    const dy = cy - closestY;
+    return (dx*dx + dy*dy) <= r*r;
+  }
+
+  // Particles
+  function burst(x, y, n) {
+    for (let i=0;i<n;i++){
+      particles.push({
+        x, y,
+        vx: rand(-120, 120),
+        vy: rand(-220, -60),
+        life: rand(250, 520),
+      });
+    }
+  }
+
+  // Loop
+  function tick(t) {
+    if (!running) return;
+    if (!lastT) lastT = t;
+    const dt = Math.min(0.033, (t - lastT) / 1000);
+    lastT = t;
+
+    score += dt * 10 * speedMul;
+
+    const ramp = 1.0 + Math.min(2.0, score / 350);
+    speedMul = ramp * selectedChar.baseMul;
+
+    const vx = baseSpeed * speedMul;
+
+    spawnObsIn -= dt * 1000;
+    spawnCoinIn -= dt * 1000;
+
+    if (spawnObsIn <= 0) {
+      spawnObstacle();
+      spawnObsIn = rand(620, 980) / clamp(speedMul, 1.0, 3.5);
+    }
+    if (spawnCoinIn <= 0) {
+      spawnCoin();
+      spawnCoinIn = rand(420, 780) / clamp(speedMul, 1.0, 3.5);
+    }
+
+    const g = 1800;
+    hero.vy += g * dt;
+    hero.y += hero.vy * dt;
+
+    const ground = world.groundY();
+    if (hero.y + hero.h >= ground) {
+      hero.y = ground - hero.h;
+      hero.vy = 0;
+      hero.onGround = true;
+    } else {
+      hero.onGround = false;
+    }
+
+    hero.invuln = Math.max(0, hero.invuln - dt*1000);
+
+    for (const o of obstacles) o.x -= vx * dt;
+    for (const c of coinDrops) c.x -= vx * dt;
+
+    while (obstacles.length && obstacles[0].x + obstacles[0].w < -50) obstacles.shift();
+    while (coinDrops.length && coinDrops[0].x + coinDrops[0].r < -50) coinDrops.shift();
+
+    const hr = heroRect();
+
+    for (const c of coinDrops) {
+      if (!c.taken && circleRectOverlap(c.x, c.y, c.r, hr)) {
+        c.taken = true;
+        coins += 1;
+        score += 15;
+        burst(c.x, c.y, 10);
+      }
+    }
+
+    const grace = hero.ducking ? (hero.duckGrace) : 1.0;
+    const shrunkH = Math.floor(hr.h / grace);
+    const hr2 = { ...hr, h: shrunkH, y: hr.y + Math.floor((hr.h - shrunkH) / 2) };
+
+    if (hero.invuln <= 0) {
+      for (const o of obstacles) {
+        if (rectsOverlap(hr2, o)) { gameOver(); break; }
+      }
+    }
+
+    for (const p of particles) {
+      p.vy += 1200 * dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.life -= dt*1000;
+    }
+    for (let i=particles.length-1;i>=0;i--){
+      if (particles[i].life <= 0) particles.splice(i,1);
+    }
+
+    updateHUD();
+    draw(vx);
+    requestAnimationFrame(tick);
+  }
+
+  // Drawing
+  function roundRect(x,y,w,h,r){
+    const rr = Math.min(r, w/2, h/2);
+    ctx.beginPath();
+    ctx.moveTo(x+rr,y);
+    ctx.arcTo(x+w,y,x+w,y+h,rr);
+    ctx.arcTo(x+w,y+h,x,y+h,rr);
+    ctx.arcTo(x,y+h,x,y,rr);
+    ctx.arcTo(x,y,x+w,y,rr);
+    ctx.closePath();
+  }
+
+  function draw(vx) {
+    const W = world.w(), H = world.h(), G = world.groundY();
+    ctx.clearRect(0,0,W,H);
+
+    ctx.globalAlpha = 0.9;
+    for (let i=0;i<60;i++){
+      const x = (i*97 + (score*18)) % (W+200) - 100;
+      const y = 40 + (i*53) % (G-120);
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
+      ctx.fillRect(x, y, 2, 2);
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = 'rgba(255,255,255,0.10)';
+    ctx.fillRect(0, G, W, H-G);
+    ctx.fillStyle = 'rgba(155,181,255,0.18)';
+    ctx.fillRect(0, G, W, 6);
+
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let x=0; x<W; x+=50){
+      const off = ((score*vx*0.0008) % 50);
+      ctx.moveTo(x-off, G+24);
+      ctx.lineTo(x-off+26, G+24);
+    }
+    ctx.stroke();
+
+    for (const c of coinDrops) {
+      if (c.taken) continue;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(255,215,0,0.95)';
+      ctx.arc(c.x, c.y, c.r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.35)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    for (const o of obstacles) {
+      if (o.type === 'block') {
+        ctx.fillStyle = 'rgba(255,90,90,0.88)';
+        ctx.fillRect(o.x, o.y, o.w, o.h);
+        ctx.fillStyle = 'rgba(255,255,255,0.18)';
+        ctx.fillRect(o.x+6, o.y+6, o.w-12, o.h-12);
+      } else if (o.type === 'spike') {
+        ctx.fillStyle = 'rgba(255,110,0,0.9)';
+        ctx.beginPath();
+        ctx.moveTo(o.x, o.y + o.h);
+        ctx.lineTo(o.x + o.w/2, o.y);
+        ctx.lineTo(o.x + o.w, o.y + o.h);
+        ctx.closePath();
+        ctx.fill();
+      } else {
+        ctx.fillStyle = 'rgba(160,160,255,0.85)';
+        ctx.fillRect(o.x, o.y, o.w, o.h);
+      }
+    }
+
+    const hr = heroRect();
+    const blink = hero.invuln > 0 && Math.floor(hero.invuln/80)%2===0;
+
+    ctx.save();
+    ctx.globalAlpha = blink ? 0.35 : 1.0;
+
+    // Body
+    ctx.fillStyle = selectedChar.accent;
+    roundRect(hr.x, hr.y, hr.w, hr.h, 14);
+    ctx.fill();
+
+    // Eye
+    ctx.fillStyle = 'rgba(255,255,255,0.95)';
+    ctx.fillRect(hr.x + hr.w*0.58, hr.y + hr.h*0.22, hr.w*0.26, hr.h*0.22);
+    ctx.fillStyle = 'rgba(30,40,60,0.9)';
+    ctx.fillRect(hr.x + hr.w*0.70, hr.y + hr.h*0.26, hr.w*0.08, hr.h*0.12);
+
+    // Shoes
+    ctx.fillStyle = selectedChar.shoe;
+    ctx.fillRect(hr.x + 6, hr.y + hr.h - 10, hr.w - 12, 10);
+
+    // Speed streaks
+    ctx.globalAlpha *= 0.35;
+    ctx.fillStyle = 'rgba(155,181,255,0.35)';
+    ctx.fillRect(hr.x - 38, hr.y + 12, 30, 6);
+    ctx.fillRect(hr.x - 52, hr.y + 26, 44, 6);
+    ctx.restore();
+
+    for (const p of particles) {
+      ctx.globalAlpha = clamp(p.life/520, 0, 1);
+      ctx.fillStyle = 'rgba(200,220,255,0.55)';
+      ctx.fillRect(p.x, p.y, 3, 3);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // UI
+  function showOverlay(title, htmlText, note, startLabel) {
+    ovTitle.textContent = title;
+    ovText.innerHTML = htmlText;
+    ovNote.textContent = note || '';
+    startBtn.textContent = startLabel || 'Começar';
+    overlay.style.display = 'flex';
+  }
+  function hideOverlay() { overlay.style.display = 'none'; }
+
+  function start() {
+    resetGame();
+    running = true;
+    hideOverlay();
+    requestAnimationFrame(tick);
+  }
+
+  function gameOver() {
+    running = false;
+    showOverlay(
+      'Game Over 😅',
+      `Você fez <b>${Math.floor(score)}</b> pontos e pegou <b>${coins}</b> moedas.<br/>Toque em <b>Começar</b> para jogar de novo.`,
+      'Dica: o Velocista Azul é mais rápido, mas exige reflexo 🙂',
+      'Jogar de novo'
+    );
+  }
+
+  startBtn.addEventListener('click', start);
+  howBtn.addEventListener('click', () => {
+    showOverlay(
+      'Como jogar',
+      `<b>Objetivo:</b> correr o máximo possível.<br/>
+       <b>Pular:</b> Espaço/↑ (ou botão PULAR).<br/>
+       <b>Deslizar:</b> ↓ (ou botão ABAIXAR) para passar por barras altas.<br/>
+       <b>Moedas:</b> aumentam sua pontuação.<br/><br/>
+       <b>Personagens:</b> toque para escolher antes de começar.`,
+      'Dica: quando a velocidade aumenta, deslizar vira essencial.',
+      'Começar'
+    );
+  });
+
+  showOverlay(
+    'Escolha o personagem',
+    `<b>PC:</b> Espaço/↑ para pular • ↓ para deslizar<br/>
+     <b>Celular:</b> use os botões na tela<br/><br/>
+     Toque em um personagem abaixo e depois em <b>Começar</b>.`,
+    'Dica: colete moedas e desvie dos obstáculos. A velocidade aumenta com o tempo.',
+    'Começar'
+  );
+
+})();
+</script>
+</body>
+</html>
