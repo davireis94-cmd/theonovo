@@ -59,3 +59,28 @@ Se der 404
 Quase sempre é porque:
 - o arquivo NÃO se chama index.html
 - ou o Pages está apontando para pasta errada (tem que ser /root).
+
+
+=========================================
+CONVITE DA FESTA (pasta "convite")
+=========================================
+Link do convite (depois de publicado na branch main):
+  https://davireis94-cmd.github.io/theonovo/convite/
+
+Arquivos:
+- convite/index.html   -> o convite com montagem de fotos e o formulário "Confirmar presença"
+- convite/lista.html   -> página da família para ver quem confirmou (pede a senha)
+- convite/fotos/       -> fotos recortadas e a imagem de prévia do WhatsApp (og.jpg)
+
+Para mudar local, endereço, horário etc.:
+- Abra convite/index.html e edite só o bloco "EDITE AQUI OS DADOS DA FESTA"
+  (logo no começo do arquivo). Salve e faça o commit na branch main.
+
+Onde ficam as confirmações:
+- No projeto "festa-theo" do Supabase (https://supabase.com/dashboard), tabela "confirmacoes".
+- Ou, mais fácil: abra convite/lista.html e digite a senha da família.
+  A senha NÃO está neste repositório, porque ele é público.
+
+Como funciona a segurança:
+- Quem abre o convite só consegue INSERIR uma confirmação e ver o total
+  de crianças confirmadas. Ninguém consegue ler nomes ou telefones sem a senha.

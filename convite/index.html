@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Copa do Theo — Convite</title>
+<meta name="description" content="Convite da festa de aniversário do Theo: campeonato de futebol no dia 1º de novembro às 10h. Confirme a presença da sua criança.">
+<meta name="theme-color" content="#1f7a3c">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Copa do Theo ⚽ Aniversário dia 1º/11 às 10h">
+<meta property="og:description" content="O Theo faz aniversário e vai ter campeonato de futebol pra criançada! Toque para ver o convite e confirmar a presença.">
+<meta property="og:image" content="https://davireis94-cmd.github.io/theonovo/convite/fotos/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://davireis94-cmd.github.io/theonovo/convite/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%23fff' stroke='%230f2740' stroke-width='5'/%3E%3Cpolygon points='32,19 44,28 40,42 24,42 20,28' fill='%230f2740'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;700;800&display=swap">
+<style>
+:root{
+  /* Layout: cartão de dia de jogo. Hero no gramado com as figurinhas do Theo, placar com a data, detalhes em "giz" e o formulário num cartão branco. */
+  --grama:#1f7a3c; --grama-2:#176331; --giz:#f7f4ec; --giz-2:#e9e3d5;
+  --placar:#0f2740; --placar-2:#1a3d60; --sol:#ffcf3f; --sol-2:#e8b300;
+  --tinta:#15202b; --tinta-2:#4f5e6d; --borda:#d6dde6; --erro:#c62828; --ok:#1f7a3c;
+  --f-display:'Lilita One','Arial Black',Impact,sans-serif;
+  --f-body:'Nunito','Segoe UI',Roboto,Arial,sans-serif;
+  --raio:16px; --sombra:0 12px 32px rgba(15,39,64,.16);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--giz);color:var(--tinta);font-family:var(--f-body);font-size:17px;line-height:1.5;overflow-x:hidden}
+img{max-width:100%;display:block}
+.wrap{max-width:680px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- HERO / GRAMADO ---------- */
+.hero{position:relative;background:var(--grama) repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 44px,rgba(0,0,0,0) 44px 88px);color:#fff;overflow:hidden;padding-block:26px 40px}
+.eyebrow{margin:0;text-align:center;font:800 12px/1 var(--f-body);letter-spacing:.18em;text-transform:uppercase;color:var(--sol)}
+.album{position:relative;display:flex;justify-content:center;align-items:center;padding-block:30px 22px;isolation:isolate}
+.album::before{content:"";position:absolute;inset:0;margin:auto;width:min(66vw,360px);aspect-ratio:1;border:4px solid rgba(255,255,255,.32);border-radius:50%;z-index:0}
+.album::after{content:"";position:absolute;left:-50vw;right:-50vw;top:50%;height:4px;background:rgba(255,255,255,.32);z-index:0}
+.fig{position:relative;z-index:1;margin:0;width:clamp(112px,31vw,196px);background:#fff;padding:6px 6px 30px;border-radius:8px;box-shadow:0 14px 28px rgba(0,0,0,.28);transform:rotate(var(--r,0deg))}
+.fig img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:3px;background:var(--giz-2)}
+.fig figcaption{position:absolute;left:0;right:0;bottom:8px;text-align:center;font:400 13px/1 var(--f-display);text-transform:uppercase;letter-spacing:.07em;color:var(--placar)}
+.fig.a{--r:-7deg;margin-right:-18px;z-index:1}
+.fig.b{--r:2deg;z-index:3;width:clamp(126px,34vw,216px);box-shadow:0 18px 36px rgba(0,0,0,.32)}
+.fig.c{--r:6deg;margin-left:-18px;z-index:2}
+.fig .estrela{position:absolute;top:-12px;right:-12px;width:34px;height:34px;border-radius:50%;background:var(--sol);display:grid;place-items:center;box-shadow:0 3px 8px rgba(0,0,0,.28)}
+.fig .estrela svg{width:20px;height:20px;fill:var(--placar)}
+.titulo{margin:16px 0 8px;text-align:center;font:400 clamp(54px,15vw,100px)/.92 var(--f-display);color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.2);text-wrap:balance}
+.titulo em{font-style:normal;color:var(--sol)}
+.sub{margin:0 auto 22px;max-width:32ch;text-align:center;font-weight:700;font-size:clamp(17px,4.5vw,20px);color:rgba(255,255,255,.95);text-wrap:balance}
+.placar{display:grid;grid-template-columns:1fr 1.45fr 1fr;max-width:420px;margin:0 auto;background:var(--placar);border:3px solid rgba(255,255,255,.14);border-radius:var(--raio);box-shadow:var(--sombra);overflow:hidden}
+.placar div{padding:12px 6px 14px;text-align:center;border-left:1px solid rgba(255,255,255,.12);min-width:0}
+.placar div:first-child{border-left:0}
+.placar small{display:block;margin-bottom:6px;font:800 11px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.62)}
+.placar b{display:block;font:400 clamp(26px,8vw,40px)/1 var(--f-display);color:var(--sol);font-variant-numeric:tabular-nums;white-space:nowrap}
+.cta{display:flex;justify-content:center;margin-top:24px}
+
+/* ---------- BOTÕES ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:54px;padding:0 26px;border:0;border-radius:999px;font:800 17px var(--f-body);text-decoration:none;cursor:pointer;transition:transform .08s ease,box-shadow .08s ease}
+.btn-sol{background:var(--sol);color:var(--placar);box-shadow:0 6px 0 var(--sol-2)}
+.btn-sol:active{transform:translateY(3px);box-shadow:0 3px 0 var(--sol-2)}
+.btn-sol:disabled{opacity:.7;cursor:wait;transform:none}
+.btn-placar{background:var(--placar);color:#fff;box-shadow:0 6px 0 #081a2e}
+.btn-placar:active{transform:translateY(3px);box-shadow:0 3px 0 #081a2e}
+.btn-leve{background:transparent;color:var(--placar);border:2px solid var(--borda);min-height:46px}
+.btn:focus-visible{outline:3px solid var(--grama);outline-offset:3px}
+.hero .btn:focus-visible{outline-color:#fff}
+.btn-bloco{width:100%}
+
+/* ---------- DETALHES ---------- */
+.detalhes{padding-block:30px 6px}
+.info{display:grid;gap:16px;margin:0;padding:0;list-style:none}
+.item{display:grid;grid-template-columns:48px minmax(0,1fr);gap:14px;align-items:start}
+.icone{width:48px;height:48px;border-radius:14px;background:var(--placar);color:var(--sol);display:grid;place-items:center}
+.icone svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.item h3{margin:0 0 2px;font:400 15px/1.1 var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--grama-2)}
+.item p{margin:0}
+.item a{color:var(--placar);font-weight:800}
+.contador{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:8px 18px 8px 10px;background:#fff;border:2px solid var(--giz-2);border-radius:999px;font-weight:800;color:var(--placar);box-shadow:0 4px 12px rgba(15,39,64,.08)}
+.contador .bola{font-size:24px;line-height:1}
+.contador b{font:400 26px/1 var(--f-display);color:var(--grama-2);font-variant-numeric:tabular-nums}
+
+/* ---------- FORMULÁRIO ---------- */
+.card{background:#fff;border-radius:22px;box-shadow:var(--sombra);padding:24px 18px 22px;margin-block:22px 44px;scroll-margin-top:12px}
+@media (min-width:560px){.card{padding:32px 30px 28px}}
+.card h2{margin:0 0 6px;font:400 clamp(30px,7.5vw,38px)/1.02 var(--f-display);color:var(--placar);text-wrap:balance}
+.card .intro{margin:0 0 20px;color:var(--tinta-2)}
+.campo{margin-bottom:16px}
+.campo label,.legenda{display:block;margin-bottom:6px;font-weight:800;font-size:14px;color:var(--placar)}
+.campo .dica{font-weight:600;color:var(--tinta-2)}
+input[type=text],input[type=tel],input[type=number],textarea{width:100%;min-height:50px;padding:12px 14px;border:2px solid var(--borda);border-radius:12px;background:#fff;color:var(--tinta);font:600 17px var(--f-body)}
+textarea{min-height:90px;resize:vertical}
+input:focus,textarea:focus{outline:none;border-color:var(--grama);box-shadow:0 0 0 4px rgba(31,122,60,.16)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:var(--giz-2);border-radius:14px}
+.seg label{position:relative;margin:0;cursor:pointer}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg span{display:block;padding:12px 8px;border-radius:10px;text-align:center;font-weight:800;font-size:15px;color:var(--tinta-2);transition:background .12s,color .12s}
+.seg input:checked+span{background:#fff;color:var(--placar);box-shadow:0 2px 8px rgba(15,39,64,.14)}
+.seg input:focus-visible+span{outline:3px solid var(--grama);outline-offset:1px}
+.linha2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:420px){.linha2{grid-template-columns:1fr}}
+.crianca{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:10px;align-items:end;padding:14px;margin-bottom:10px;border:2px dashed var(--giz-2);border-radius:14px}
+.crianca .joga{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:2px 0 0;font-weight:700;font-size:15px;color:var(--tinta-2);cursor:pointer}
+.crianca .joga input{width:22px;height:22px;margin:0;accent-color:var(--grama)}
+.crianca .remover{position:absolute;top:6px;right:8px;padding:6px 8px;background:none;border:0;border-radius:8px;color:var(--tinta-2);font:800 13px var(--f-body);cursor:pointer}
+.crianca .remover:hover{background:var(--giz)}
+.crianca .remover:focus-visible{outline:3px solid var(--grama)}
+.crianca.so-uma .remover{display:none}
+.add{margin:2px 0 20px;padding:10px 14px;background:none;border:2px dashed var(--borda);border-radius:12px;width:100%;color:var(--placar);font:800 15px var(--f-body);cursor:pointer}
+.add:hover{border-color:var(--grama);color:var(--grama-2)}
+.add:focus-visible{outline:3px solid var(--grama)}
+.msg{margin:12px 0 0;min-height:1.2em;font-weight:700;color:var(--erro)}
+.aviso{display:flex;gap:10px;align-items:flex-start;margin:0 0 18px;padding:12px 14px;background:var(--giz);border-radius:12px;font-size:15px;color:var(--tinta-2)}
+.aviso b{color:var(--grama-2)}
+.aviso button{background:none;border:0;padding:0;color:var(--placar);font:800 15px var(--f-body);text-decoration:underline;cursor:pointer}
+
+/* ---------- SUCESSO ---------- */
+.sucesso{text-align:center}
+.sucesso .check{width:84px;height:84px;margin:0 auto 10px;border-radius:50%;background:var(--grama);display:grid;place-items:center;box-shadow:0 8px 0 var(--grama-2)}
+.sucesso .check svg{width:46px;height:46px;fill:none;stroke:#fff;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.sucesso h2{margin-bottom:4px}
+.sucesso p{margin:0 0 14px;color:var(--tinta-2)}
+.sucesso ul{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:6px}
+.sucesso li{padding:10px 12px;background:var(--giz);border-radius:10px;font-weight:800;color:var(--placar)}
+.sucesso .acoes{display:grid;gap:10px}
+
+footer{padding-block:0 40px;text-align:center;color:var(--tinta-2);font-size:14px}
+footer a{color:var(--tinta-2)}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<script>
+// ============================================================
+//  EDITE AQUI OS DADOS DA FESTA (só esta parte precisa mudar)
+// ============================================================
+const FESTA = {
+  aniversariante: 'Theo',
+  data: '2026-11-01',        // AAAA-MM-DD
+  hora: '10:00',             // HH:MM
+  duracaoHoras: 3,           // usado apenas no botão "Adicionar ao calendário"
+  local: '',                 // ex.: 'Quadra do Condomínio Sol'
+  endereco: '',              // ex.: 'Rua das Flores, 123 - Bairro, Cidade'
+  linkMapa: '',              // ex.: 'https://maps.app.goo.gl/xxxxx'
+  whatsappAnfitriao: '',     // ex.: '5511999999999' (só números, com DDI e DDD) -> mostra "Falar com a família"
+};
+// Banco de confirmações (chave pública, feita para ficar no site)
+const SUPABASE = {
+  url: 'https://spldtyrlwczaczljrnkv.supabase.co',
+  chave: 'sb_publishable__Tjuatw8jINLHgpDZheduQ_ZTzJbamG',
+};
+</script>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Convite · Aniversário</p>
+
+    <div class="album" aria-label="Fotos do Theo">
+      <figure class="fig a">
+        <img src="fotos/theo-pintura.jpg" alt="Theo sorrindo com o rosto pintado" width="640" height="800">
+        <figcaption>Torcedor</figcaption>
+      </figure>
+      <figure class="fig b">
+        <img src="fotos/theo-futebol.jpg" alt="Theo sorrindo com camisa de futebol" width="640" height="800">
+        <figcaption>Camisa 10</figcaption>
+        <span class="estrela" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z"/></svg></span>
+      </figure>
+      <figure class="fig c">
+        <img src="fotos/theo-desenho.jpg" alt="Theo desenhando e sorrindo" width="640" height="800">
+        <figcaption>Artista</figcaption>
+      </figure>
+    </div>
+
+    <h1 class="titulo">Copa do <em>Theo</em></h1>
+    <p class="sub">O Theo faz aniversário e vai ter campeonato de futebol pra criançada!</p>
+
+    <div class="placar" role="group" aria-label="Data e horário">
+      <div><small>Dia</small><b id="placarDia">DOM</b></div>
+      <div><small>Data</small><b id="placarData">1º NOV</b></div>
+      <div><small>Hora</small><b id="placarHora">10H</b></div>
+    </div>
+
+    <div class="cta">
+      <a class="btn btn-sol" href="#confirmar">Confirmar presença</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="detalhes" aria-labelledby="detalhesTitulo">
+    <h2 id="detalhesTitulo" hidden>Detalhes da festa</h2>
+    <ul class="info">
+      <li class="item">
+        <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+        <div><h3>Quando</h3><p id="quandoTxt">Domingo, 1º de novembro, às 10h</p></div>
+      </li>
+      <li class="item">
+        <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21.5s-6.5-6-6.5-11.5a6.5 6.5 0 0 1 13 0C18.5 15.5 12 21.5 12 21.5z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+        <div><h3>Onde</h3><p id="ondeTxt">O local será informado em breve.</p></div>
+      </li>
+      <li class="item">
+        <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5a3 3 0 0 0 3 3M16 6h3a3 3 0 0 1-3 3M12 13v4M9 21h6M9 17h6"/></svg></span>
+        <div><h3>O jogo</h3><p>Vai ter campeonato de futebol entre as crianças. Vale vir de tênis e roupa confortável pra jogar. Por isso precisamos saber quem vem: assim montamos os times!</p></div>
+      </li>
+    </ul>
+    <p id="contador" class="contador" hidden><span class="bola" aria-hidden="true">⚽</span><b id="contadorNum">0</b><span id="contadorTxt"></span></p>
+  </section>
+
+  <section id="confirmar" class="card" aria-labelledby="formTitulo">
+    <form id="form" novalidate>
+      <h2 id="formTitulo">Confirme a presença</h2>
+      <p class="intro">Leva menos de um minuto. Só precisamos do nome de quem vem jogar.</p>
+
+      <div id="jaConfirmou" class="aviso" hidden>
+        <span aria-hidden="true">✅</span>
+        <span>Você já confirmou por aqui: <b id="jaConfirmouNomes"></b>. Quer confirmar outra criança? É só preencher de novo.</span>
+      </div>
+
+      <div class="campo">
+        <span class="legenda" id="vaiLegenda">Vocês vão poder ir?</span>
+        <div class="seg" role="radiogroup" aria-labelledby="vaiLegenda">
+          <label><input type="radio" name="vai" value="sim" id="vaiSim" checked><span>Sim, vamos!</span></label>
+          <label><input type="radio" name="vai" value="nao" id="vaiNao"><span>Não vamos conseguir</span></label>
+        </div>
+      </div>
+
+      <div class="linha2">
+        <div class="campo">
+          <label for="responsavel">Nome do responsável</label>
+          <input type="text" id="responsavel" name="responsavel" maxlength="80" autocomplete="name" required>
+        </div>
+        <div class="campo">
+          <label for="telefone">WhatsApp <span class="dica">(opcional)</span></label>
+          <input type="tel" id="telefone" name="telefone" maxlength="30" autocomplete="tel" inputmode="tel" placeholder="(11) 99999-9999">
+        </div>
+      </div>
+
+      <span class="legenda">Crianças</span>
+      <div id="criancas"></div>
+      <button type="button" class="add" id="addCrianca">+ Adicionar outra criança</button>
+
+      <div class="campo">
+        <label for="observacoes">Alguma observação? <span class="dica">(opcional: alergia, restrição alimentar…)</span></label>
+        <textarea id="observacoes" name="observacoes" maxlength="500"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-sol btn-bloco" id="enviar">Confirmar presença</button>
+      <p class="msg" id="msg" role="alert"></p>
+    </form>
+
+    <div id="sucesso" class="sucesso" hidden>
+      <div class="check" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2 id="sucessoTitulo">Presença confirmada!</h2>
+      <p id="sucessoTxt"></p>
+      <ul id="sucessoLista"></ul>
+      <div class="acoes">
+        <a class="btn btn-placar" id="btnCalendario" href="#" target="_blank" rel="noopener">Adicionar ao calendário</a>
+        <a class="btn btn-leve" id="btnWhats" href="#" target="_blank" rel="noopener" hidden>Falar com a família</a>
+        <button type="button" class="btn btn-leve" id="btnOutra">Confirmar outra criança</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Com carinho, a família do Theo.</p>
+</footer>
+
+<template id="tplCrianca">
+  <div class="crianca">
+    <button type="button" class="remover" aria-label="Remover esta criança">remover</button>
+    <div>
+      <label class="c-nome-label">Nome da criança</label>
+      <input type="text" class="c-nome" maxlength="80" autocomplete="off" required>
+    </div>
+    <div>
+      <label class="c-idade-label">Idade</label>
+      <input type="number" class="c-idade" min="0" max="17" inputmode="numeric" placeholder="anos">
+    </div>
+    <label class="joga"><input type="checkbox" class="c-joga" checked> Vai jogar no campeonato</label>
+  </div>
+</template>
+
+<script>
+(() => {
+  const $ = (s, el = document) => el.querySelector(s);
+  const headers = {
+    apikey: SUPABASE.chave,
+    Authorization: 'Bearer ' + SUPABASE.chave,
+    'Content-Type': 'application/json',
+  };
+
+  // ---------- Data, hora e local ----------
+  const [Y, M, D] = FESTA.data.split('-').map(Number);
+  const [HH, MM] = FESTA.hora.split(':').map(Number);
+  const dt = new Date(Y, M - 1, D, HH, MM);
+  const dias = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+  const meses = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+  const diaTxt = D === 1 ? '1º' : String(D);
+  const horaTxt = MM === 0 ? `${HH}h` : `${HH}h${String(MM).padStart(2, '0')}`;
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+
+  $('#placarDia').textContent = dias[dt.getDay()].slice(0, 3).toUpperCase();
+  $('#placarData').textContent = `${diaTxt} ${meses[M - 1].slice(0, 3).toUpperCase()}`;
+  $('#placarHora').textContent = horaTxt.toUpperCase();
+  $('#quandoTxt').textContent = `${cap(dias[dt.getDay()])}, ${diaTxt} de ${meses[M - 1]}, às ${horaTxt}`;
+
+  const onde = $('#ondeTxt');
+  if (FESTA.local || FESTA.endereco) {
+    onde.textContent = '';
+    if (FESTA.local) { const b = document.createElement('b'); b.textContent = FESTA.local; onde.append(b); }
+    if (FESTA.endereco) { onde.append(FESTA.local ? document.createElement('br') : '', FESTA.endereco); }
+    if (FESTA.linkMapa) {
+      const a = document.createElement('a'); a.href = FESTA.linkMapa; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Ver no mapa';
+      onde.append(document.createElement('br'), a);
+    }
+  }
+
+  // Link "Adicionar ao calendário" (Google Agenda)
+  const pad = n => String(n).padStart(2, '0');
+  const fmt = d => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+  const fim = new Date(dt.getTime() + FESTA.duracaoHoras * 3600 * 1000);
+  const cal = new URL('https://calendar.google.com/calendar/render');
+  cal.searchParams.set('action', 'TEMPLATE');
+  cal.searchParams.set('text', `Copa do ${FESTA.aniversariante} (aniversário)`);
+  cal.searchParams.set('dates', `${fmt(dt)}/${fmt(fim)}`);
+  cal.searchParams.set('ctz', 'America/Sao_Paulo');
+  cal.searchParams.set('details', `Campeonato de futebol das crianças. Convite: ${location.href.split('#')[0]}`);
+  const lugar = [FESTA.local, FESTA.endereco].filter(Boolean).join(' - ');
+  if (lugar) cal.searchParams.set('location', lugar);
+  $('#btnCalendario').href = cal.toString();
+
+  if (FESTA.whatsappAnfitriao) {
+    const w = $('#btnWhats');
+    w.href = `https://wa.me/${FESTA.whatsappAnfitriao.replace(/\D/g, '')}`;
+    w.hidden = false;
+  }
+
+  // ---------- Contador público (só números agregados) ----------
+  async function carregarResumo() {
+    try {
+      const r = await fetch(`${SUPABASE.url}/rest/v1/resumo_confirmacoes?select=*`, { headers });
+      if (!r.ok) throw new Error(r.status);
+      const [d] = await r.json();
+      const n = Number(d?.criancas_confirmadas || 0);
+      $('#contadorNum').textContent = n;
+      $('#contadorNum').hidden = n === 0;
+      $('#contadorTxt').textContent = n === 0 ? 'Seja a primeira família a confirmar!' : n === 1 ? 'criança já confirmada' : 'crianças já confirmadas';
+      $('#contador').hidden = false;
+    } catch (e) { /* sem rede: o contador fica escondido */ }
+  }
+  carregarResumo();
+
+  // ---------- Linhas de crianças ----------
+  const lista = $('#criancas');
+  const tpl = $('#tplCrianca');
+  let seq = 0;
+  function addCrianca(foco) {
+    const row = tpl.content.firstElementChild.cloneNode(true);
+    seq += 1;
+    const nome = $('.c-nome', row), idade = $('.c-idade', row), joga = $('.c-joga', row);
+    nome.id = `crianca-nome-${seq}`; idade.id = `crianca-idade-${seq}`; joga.id = `crianca-joga-${seq}`;
+    $('.c-nome-label', row).htmlFor = nome.id;
+    $('.c-idade-label', row).htmlFor = idade.id;
+    $('.remover', row).addEventListener('click', () => { row.remove(); atualizarLinhas(); });
+    lista.append(row);
+    atualizarLinhas();
+    if (foco) nome.focus();
+  }
+  function atualizarLinhas() {
+    const rows = lista.querySelectorAll('.crianca');
+    rows.forEach(r => r.classList.toggle('so-uma', rows.length === 1));
+    const vai = $('#vaiSim').checked;
+    rows.forEach(r => { $('.joga', r).hidden = !vai; });
+  }
+  addCrianca(false);
+  $('#addCrianca').addEventListener('click', () => addCrianca(true));
+
+  const form = $('#form');
+  const enviar = $('#enviar');
+  function atualizarModo() {
+    const vai = $('#vaiSim').checked;
+    enviar.textContent = vai ? 'Confirmar presença' : 'Enviar resposta';
+    atualizarLinhas();
+  }
+  form.vai.forEach(r => r.addEventListener('change', atualizarModo));
+
+  // ---------- Já confirmou neste aparelho? ----------
+  try {
+    const salvo = JSON.parse(localStorage.getItem('copa-theo-confirmacao') || 'null');
+    if (salvo && salvo.vai && Array.isArray(salvo.criancas) && salvo.criancas.length) {
+      $('#jaConfirmouNomes').textContent = salvo.criancas.join(', ');
+      $('#jaConfirmou').hidden = false;
+    }
+  } catch (e) { /* armazenamento indisponível */ }
+
+  // ---------- Envio ----------
+  const msg = $('#msg');
+  function erro(t) { msg.textContent = t; }
+  function uuid() {
+    if (crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+  }
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    erro('');
+    const vai = $('#vaiSim').checked;
+    const responsavel = $('#responsavel').value.trim();
+    const telefone = $('#telefone').value.trim();
+    const observacoes = $('#observacoes').value.trim();
+    const rows = [...lista.querySelectorAll('.crianca')].map(r => ({
+      el: r,
+      nome: $('.c-nome', r).value.trim(),
+      idade: $('.c-idade', r).value.trim(),
+      joga: $('.c-joga', r).checked,
+    }));
+    const criancas = rows.filter(c => c.nome);
+
+    if (!responsavel) { erro('Escreva o nome do responsável.'); $('#responsavel').focus(); return; }
+    if (!criancas.length) { erro('Escreva o nome de pelo menos uma criança.'); $('.c-nome', rows[0].el).focus(); return; }
+    const idadeRuim = criancas.find(c => c.idade !== '' && !(Number(c.idade) >= 0 && Number(c.idade) <= 17));
+    if (idadeRuim) { erro('A idade precisa ser um número entre 0 e 17.'); $('.c-idade', idadeRuim.el).focus(); return; }
+
+    const grupo = uuid();
+    const payload = criancas.map(c => ({
+      grupo,
+      responsavel,
+      telefone: telefone || null,
+      crianca: c.nome,
+      idade: c.idade === '' ? null : Number(c.idade),
+      vai,
+      joga_futebol: vai && c.joga,
+      observacoes: observacoes || null,
+    }));
+
+    const rotulo = enviar.textContent;
+    enviar.disabled = true; enviar.textContent = 'Enviando…';
+    try {
+      const r = await fetch(`${SUPABASE.url}/rest/v1/confirmacoes`, {
+        method: 'POST',
+        headers: { ...headers, Prefer: 'return=minimal' },
+        body: JSON.stringify(payload),
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      mostrarSucesso(vai, criancas.map(c => c.nome), responsavel);
+      try { localStorage.setItem('copa-theo-confirmacao', JSON.stringify({ vai, criancas: criancas.map(c => c.nome), quando: Date.now() })); } catch (e) {}
+      carregarResumo();
+    } catch (err) {
+      erro('Não conseguimos enviar agora. Confira a internet e tente de novo em instantes.');
+    } finally {
+      enviar.disabled = false; enviar.textContent = rotulo;
+    }
+  });
+
+  function mostrarSucesso(vai, nomes, responsavel) {
+    const primeiro = responsavel.split(' ')[0];
+    $('#sucessoTitulo').textContent = vai ? 'Presença confirmada!' : 'Resposta enviada';
+    $('#sucessoTxt').textContent = vai
+      ? `Valeu, ${primeiro}! Já estamos contando com a criançada no gramado, ${diaTxt} de ${meses[M - 1]} às ${horaTxt}.`
+      : `Obrigado por avisar, ${primeiro}. Vamos sentir falta, mas fica para a próxima!`;
+    const ul = $('#sucessoLista'); ul.innerHTML = '';
+    nomes.forEach(n => { const li = document.createElement('li'); li.textContent = n; ul.append(li); });
+    $('#btnCalendario').hidden = !vai;
+    form.hidden = true;
+    $('#sucesso').hidden = false;
+    $('#confirmar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  $('#btnOutra').addEventListener('click', () => {
+    form.reset();
+    lista.innerHTML = ''; addCrianca(false); atualizarModo();
+    $('#sucesso').hidden = true; form.hidden = false;
+    $('#jaConfirmou').hidden = true;
+    $('#responsavel').focus();
+  });
+})();
+</script>
+</body>
+</html>
