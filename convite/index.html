@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Copa do Theo — Convite</title>
-<meta name="description" content="Convite da festa de aniversário do Theo: campeonato de futebol no dia 1º de novembro às 10h. Confirme a presença da sua criança.">
+<meta name="description" content="Convite da festa de aniversário do Theo: campeonato de futebol no dia 31 de outubro às 10h. Confirme a presença da sua criança.">
 <meta name="theme-color" content="#1f7a3c">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Copa do Theo ⚽ Aniversário dia 1º/11 às 10h">
+<meta property="og:title" content="Copa do Theo ⚽ Aniversário dia 31/10 às 10h">
 <meta property="og:description" content="O Theo faz aniversário e vai ter campeonato de futebol pra criançada! Toque para ver o convite e confirmar a presença.">
 <meta property="og:image" content="https://davireis94-cmd.github.io/theonovo/convite/fotos/og.jpg">
 <meta property="og:image:width" content="1200">
@@ -81,6 +81,11 @@ img{max-width:100%;display:block}
 .item a{color:var(--placar);font-weight:800}
 .contador{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:8px 18px 8px 10px;background:#fff;border:2px solid var(--giz-2);border-radius:999px;font-weight:800;color:var(--placar);box-shadow:0 4px 12px rgba(15,39,64,.08)}
 .contador .bola{font-size:24px;line-height:1}
+.mapa{margin-top:20px;background:#fff;border-radius:var(--raio);box-shadow:var(--sombra);overflow:hidden}
+.mapa-frame{position:relative;aspect-ratio:16/10;max-height:320px;background:var(--giz-2)}
+.mapa-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.mapa .btn{border-radius:0;box-shadow:none}
+.mapa .btn:active{transform:none}
 .contador b{font:400 26px/1 var(--f-display);color:var(--grama-2);font-variant-numeric:tabular-nums}
 
 /* ---------- FORMULÁRIO ---------- */
@@ -141,13 +146,14 @@ footer a{color:var(--tinta-2)}
 // ============================================================
 const FESTA = {
   aniversariante: 'Theo',
-  data: '2026-11-01',        // AAAA-MM-DD
+  data: '2026-10-31',        // AAAA-MM-DD
   hora: '10:00',             // HH:MM
   duracaoHoras: 3,           // usado apenas no botão "Adicionar ao calendário"
-  local: '',                 // ex.: 'Quadra do Condomínio Sol'
-  endereco: '',              // ex.: 'Rua das Flores, 123 - Bairro, Cidade'
-  linkMapa: '',              // ex.: 'https://maps.app.goo.gl/xxxxx'
-  whatsappAnfitriao: '',     // ex.: '5511999999999' (só números, com DDI e DDD) -> mostra "Falar com a família"
+  local: 'Quadra do Aterro do Flamengo',
+  endereco: 'Ao lado do Quiosque Zeronove · Av. Infante Dom Henrique, 735 - Glória, Rio de Janeiro',
+  linkMapa: 'https://www.google.com/maps/search/?api=1&query=Quiosque+Zeronove&query_place_id=ChIJ5SIzD9SBmQARLzLkaady49E', // abre no Google Maps
+  mapa: { lat: -22.928024, lng: -43.1716595, zoom: 16, busca: 'Quiosque Zeronove' }, // mapa incorporado; use mapa: null para esconder
+  whatsappAnfitriao: '',     // ex.: '5521999999999' (só números, com DDI e DDD) -> mostra "Falar com a família"
 };
 // Banco de confirmações (chave pública, feita para ficar no site)
 const SUPABASE = {
@@ -180,8 +186,8 @@ const SUPABASE = {
     <p class="sub">O Theo faz aniversário e vai ter campeonato de futebol pra criançada!</p>
 
     <div class="placar" role="group" aria-label="Data e horário">
-      <div><small>Dia</small><b id="placarDia">DOM</b></div>
-      <div><small>Data</small><b id="placarData">1º NOV</b></div>
+      <div><small>Dia</small><b id="placarDia">SÁB</b></div>
+      <div><small>Data</small><b id="placarData">31 OUT</b></div>
       <div><small>Hora</small><b id="placarHora">10H</b></div>
     </div>
 
@@ -197,17 +203,21 @@ const SUPABASE = {
     <ul class="info">
       <li class="item">
         <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
-        <div><h3>Quando</h3><p id="quandoTxt">Domingo, 1º de novembro, às 10h</p></div>
+        <div><h3>Quando</h3><p id="quandoTxt">Sábado, 31 de outubro, às 10h</p></div>
       </li>
       <li class="item">
         <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21.5s-6.5-6-6.5-11.5a6.5 6.5 0 0 1 13 0C18.5 15.5 12 21.5 12 21.5z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-        <div><h3>Onde</h3><p id="ondeTxt">O local será informado em breve.</p></div>
+        <div><h3>Onde</h3><p id="ondeTxt"><b>Quadra do Aterro do Flamengo</b><br>Ao lado do Quiosque Zeronove · Av. Infante Dom Henrique, 735 - Glória, Rio de Janeiro</p></div>
       </li>
       <li class="item">
         <span class="icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 6H5a3 3 0 0 0 3 3M16 6h3a3 3 0 0 1-3 3M12 13v4M9 21h6M9 17h6"/></svg></span>
         <div><h3>O jogo</h3><p>Vai ter campeonato de futebol entre as crianças. Vale vir de tênis e roupa confortável pra jogar. Por isso precisamos saber quem vem: assim montamos os times!</p></div>
       </li>
     </ul>
+    <div class="mapa" id="mapa" hidden>
+      <div class="mapa-frame"><iframe id="mapaFrame" title="Mapa do local da festa" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></div>
+      <a class="btn btn-placar btn-bloco" id="btnMapa" href="#" target="_blank" rel="noopener">Abrir no Google Maps</a>
+    </div>
     <p id="contador" class="contador" hidden><span class="bola" aria-hidden="true">⚽</span><b id="contadorNum">0</b><span id="contadorTxt"></span></p>
   </section>
 
@@ -315,10 +325,19 @@ const SUPABASE = {
     onde.textContent = '';
     if (FESTA.local) { const b = document.createElement('b'); b.textContent = FESTA.local; onde.append(b); }
     if (FESTA.endereco) { onde.append(FESTA.local ? document.createElement('br') : '', FESTA.endereco); }
-    if (FESTA.linkMapa) {
+    if (FESTA.linkMapa && !(FESTA.mapa && FESTA.mapa.lat)) {
       const a = document.createElement('a'); a.href = FESTA.linkMapa; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Ver no mapa';
       onde.append(document.createElement('br'), a);
     }
+  }
+
+  // Mapa incorporado (Google Maps) + botão para abrir no app
+  if (FESTA.mapa && FESTA.mapa.lat) {
+    const m = FESTA.mapa;
+    const q = m.busca ? encodeURIComponent(m.busca) : `${m.lat},${m.lng}`;
+    $('#mapaFrame').src = `https://maps.google.com/maps?q=${q}&ll=${m.lat},${m.lng}&z=${m.zoom || 16}&hl=pt-BR&output=embed`;
+    $('#btnMapa').href = FESTA.linkMapa || `https://www.google.com/maps?q=${m.lat},${m.lng}`;
+    $('#mapa').hidden = false;
   }
 
   // Link "Adicionar ao calendário" (Google Agenda)
